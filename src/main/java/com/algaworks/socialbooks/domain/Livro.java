@@ -10,7 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -22,18 +27,24 @@ public class Livro {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotEmpty(message = "O campo nome não pode ser vazio.")
 	private String nome;
 	
+	@NotNull(message = "O campo de publicação é obrigatorio")
 	@JsonInclude(Include.NON_NULL)
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date publicacao;
 	
+	@NotNull(message = "O campo de editora é obrigatorio")
 	@JsonInclude(Include.NON_NULL)
 	private String editora;
 	
+	@NotEmpty(message = "O campo resumo é obrigatorio.")
 	@JsonInclude(Include.NON_NULL)
+	@Size(max = 1500, message = "O campo resumo não pode conter mais de 1500 caracteres.")
 	private String resumo;
 	
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(Include.NON_EMPTY)
 	@OneToMany(mappedBy = "livro")
 	private List<Comentario> comentarios;
 	
